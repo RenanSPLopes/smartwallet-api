@@ -16,7 +16,7 @@ spec:
         "beta.kubernetes.io/os": linux
       containers:
       - name: smartwallet-api
-        image: smartwallet.azurecr.io/marketdata-api:__tag__
+        image: smartwallet.azurecr.io/smartwallet-api:__tag__
         env:
         - name: RABBIT_CONNECTIONSTRING
           valueFrom:
