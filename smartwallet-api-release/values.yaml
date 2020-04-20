@@ -1,0 +1,2 @@
+rabbitmq_connectionString: __RABBITMQ_CONNECTIONSTRING__
+rabbitmq_marketdata_queue_name: __MARKETDATA_QUEUE_NAME__

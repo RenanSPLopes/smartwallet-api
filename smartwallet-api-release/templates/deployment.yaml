@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: marketdata-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: smartwallet-api
+  template:
+    metadata:
+      labels:
+        app: smartwallet-api
+    spec:
+      nodeSelector:
+        "beta.kubernetes.io/os": linux
+      containers:
+      - name: smartwallet-api
+        image: smartwallet.azurecr.io/marketdata-api:__tag__
+        env:
+        - name: RABBIT_CONNECTIONSTRING
+          valueFrom:
+            configMapKeyRef:
+              name: marketdata-api-config
+              key: rabbitmq_connectionString
+        - name: MARKETDATA_QUEUE_NAME
+          valueFrom:
+            configMapKeyRef:
+              name: marketdata-api-config
+              key: rabbitmq_marketdata_queue_name
+        ports:
+        - containerPort: 19000
+          name: smartwallet-api
