@@ -11,6 +11,6 @@ spec:
   - http:
       paths:
       - backend:
-          serviceName: smartwallet-api-api-service
+          serviceName: smartwallet-api-service
           servicePort: 80
         path: /
