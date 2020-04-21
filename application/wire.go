@@ -22,6 +22,6 @@ func provideRabbitMQClient(c Config) controllers.RabbitMQClient {
 	return controllers.NewRabbitMQClient(c.RabbitMQ.ConnectionString)
 }
 
-func initRabbitMQClient() controllers.RabbitMQClient {
+func ProvideRabbitMQClient() controllers.RabbitMQClient {
 	panic(wire.Build(provideRabbitMQClient, provideConfig))
 }

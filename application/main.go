@@ -3,7 +3,9 @@ package main
 func main() {
 	r := registerRoutes()
 
-	initRabbitMQClient()
+	config := provideConfig()
+	rabbitmqClient := ProvideRabbitMQClient()
+	rabbitmqClient.Listen(config.RabbitMQ.QueueName)
 
 	r.Run(":19000")
 }

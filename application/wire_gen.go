@@ -12,7 +12,7 @@ import (
 
 // Injectors from wire.go:
 
-func initRabbitMQClient() controllers.RabbitMQClient {
+func ProvideRabbitMQClient() controllers.RabbitMQClient {
 	config := provideConfig()
 	rabbitMQClient := provideRabbitMQClient(config)
 	return rabbitMQClient
