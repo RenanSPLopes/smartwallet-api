@@ -2,8 +2,8 @@ package controllers
 
 import (
 	"log"
-	"smartwallet/smartwallet-api/application/models"
-	"smartwallet/smartwallet-api/application/services"
+	"smartwallet-api/application/models"
+	"smartwallet-api/application/services"
 
 	"github.com/streadway/amqp"
 
@@ -60,7 +60,7 @@ func (r RabbitMQClient) Listen(queueName string) {
 				log.Fatal("Failed to decode message.")
 			}
 
-			MarketDataProcessor.Process(m)
+			r.MarketDataProcessor.Process(m)
 		}
 	}()
 
