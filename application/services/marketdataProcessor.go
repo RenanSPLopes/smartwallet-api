@@ -1,6 +1,7 @@
 package services
 
 import (
+	"log"
 	"smartwallet-api/application/models"
 )
 
@@ -17,5 +18,5 @@ func NewMarketDataProcessorService() MarketDataProcessorService {
 }
 
 func (marketDataProcessor MarketDataProcessorService) Process(marketData models.MarketData){
-	
+	log.Printf("Message received.")
 }
