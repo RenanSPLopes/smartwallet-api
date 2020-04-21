@@ -10,8 +10,8 @@ type RabbitMQClient struct {
 	ConnectionString string
 }
 
-func NewRabbitMQClient(connectrionString string) *RabbitMQClient {
-	return &RabbitMQClient{ConnectionString: connectrionString}
+func NewRabbitMQClient(connectrionString string) RabbitMQClient {
+	return RabbitMQClient{ConnectionString: connectrionString}
 }
 
 func failOnError(err error, msg string) {
@@ -20,7 +20,7 @@ func failOnError(err error, msg string) {
 	}
 }
 
-func (r *RabbitMQClient) Listen(queueName string) {
+func (r RabbitMQClient) Listen(queueName string) {
 	conn, err := amqp.Dial(r.ConnectionString)
 	failOnError(err, "Failed to connect to RabbitMQ")
 	defer conn.Close()
