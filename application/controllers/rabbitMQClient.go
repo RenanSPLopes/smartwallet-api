@@ -2,16 +2,21 @@ package controllers
 
 import (
 	"log"
+	"smartwallet/smartwallet-api/application/models"
+	"smartwallet/smartwallet-api/application/services"
 
 	"github.com/streadway/amqp"
+
+	"encoding/json"
 )
 
 type RabbitMQClient struct {
-	ConnectionString string
+	ConnectionString    string
+	MarketDataProcessor services.MarketDataProcessor
 }
 
-func NewRabbitMQClient(connectrionString string) RabbitMQClient {
-	return RabbitMQClient{ConnectionString: connectrionString}
+func NewRabbitMQClient(connectrionString string, marketDataProcessor services.MarketDataProcessor) RabbitMQClient {
+	return RabbitMQClient{ConnectionString: connectrionString, MarketDataProcessor: marketDataProcessor}
 }
 
 func failOnError(err error, msg string) {
@@ -48,10 +53,18 @@ func (r RabbitMQClient) Listen(queueName string) {
 	go func() {
 		for d := range msgs {
 			log.Printf("Received a message: %s", d.Body)
+			var m models.MarketData
+			err := json.Unmarshal(d.Body, &m)
+
+			if err != nil {
+				log.Fatal("Failed to decode message.")
+			}
+
+			MarketDataProcessor.Process(m)
 		}
 	}()
 
-	log.Printf(" [*] Waiting for messages. To exit press CTRL+C")
+	log.Printf(" [*] Waiting for messages.")
 
 	<-forever
 }

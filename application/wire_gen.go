@@ -8,13 +8,15 @@ package main
 import (
 	"os"
 	"smartwallet-api/application/controllers"
+	"smartwallet-api/application/services"
 )
 
 // Injectors from wire.go:
 
 func ProvideRabbitMQClient() controllers.RabbitMQClient {
 	config := provideConfig()
-	rabbitMQClient := provideRabbitMQClient(config)
+	marketDataProcessorService := provideMarketDataProcessor()
+	rabbitMQClient := provideRabbitMQClient(config, marketDataProcessorService)
 	return rabbitMQClient
 }
 
@@ -29,6 +31,10 @@ func provideConfig() Config {
 	}
 }
 
-func provideRabbitMQClient(c Config) controllers.RabbitMQClient {
-	return controllers.NewRabbitMQClient(c.RabbitMQ.ConnectionString)
+func provideRabbitMQClient(c Config, m services.MarketDataProcessorService) controllers.RabbitMQClient {
+	return controllers.NewRabbitMQClient(c.RabbitMQ.ConnectionString, m)
+}
+
+func provideMarketDataProcessor() services.MarketDataProcessorService {
+	return services.NewMarketDataProcessorService()
 }
