@@ -3,6 +3,8 @@ package services
 import (
 	"log"
 	"smartwallet-api/application/models"
+	mapper "github.com/PeteProgrammer/go-automapper"
+	"smartwallet-api/domain/entities"
 )
 
 type MarketDataProcessor interface{
@@ -17,6 +19,8 @@ func NewMarketDataProcessorService() MarketDataProcessorService {
 	return MarketDataProcessorService{}
 }
 
-func (marketDataProcessor MarketDataProcessorService) Process(marketData models.MarketData){
-	log.Printf("Message received.")
+func (marketDataProcessor MarketDataProcessorService) Process(marketDataModel models.MarketData){
+	var marketData entities.MarketData
+	mapper.Map(marketDataModel, &marketData)
+
 }

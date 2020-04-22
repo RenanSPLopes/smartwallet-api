@@ -1,4 +1,4 @@
-package entities
+package dtos
 
 type MarketData struct {
 	Name           string
@@ -15,8 +15,9 @@ type MarketData struct {
 }
 
 type Stock struct {
-	Code string `json:"id"`
-	Type string `json:"type"`
+	Code string 
+	Type string 
+	Quotes float32 
 }
 
 type BalanceSheet struct {
@@ -41,4 +42,18 @@ type Market struct {
 	MarketValue     float64
 	EnterpriseValue float64
 	Stocks          float64
+}
+
+type MarketIndicators struct{
+	PriceEarningsRatio float64
+	PriceAssetValue float64
+	PriceEBITDA float64
+	PriceEBIT float64
+}
+
+type FinancialIndicators struct{
+	MarginEBITDA float32
+	MarginEBIT float32
+	NetMargin float32
+	ROE float32
 }

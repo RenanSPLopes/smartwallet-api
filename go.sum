@@ -1,3 +1,5 @@
+github.com/PeteProgrammer/go-automapper v0.0.0-20200419053654-7c63d5bb0eb4 h1:S+0ODzOh5zBv4dlixiY+a6ZcwlbSkRXtkK8cJm+aKJo=
+github.com/PeteProgrammer/go-automapper v0.0.0-20200419053654-7c63d5bb0eb4/go.mod h1:gzkRbKGjRtfeCc53wW2SyIPPx9wU5oM6bzr6qF/kWuI=
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/gin-contrib/sse v0.1.0 h1:Y/yl/+YNO8GZSjAhjMsSuLt29uWRFHdHYUb5lYOV9qE=
