@@ -63,7 +63,7 @@ type FinancialIndicators struct{
 	DebitToEBIT float32
 }
 
-func (m *MarketData) GetIndicators(){
+func (m *MarketData) SetIndicators(){
 	for _, r := range m.Results{
 		for _, s := range m.Stocks{
 			marketIndicators := MarketIndicators{

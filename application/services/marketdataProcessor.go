@@ -42,6 +42,8 @@ func (m MarketDataProcessorService) Process(marketDataModel models.MarketData){
 		Market: mapMarketFromModel(marketDataModel.Market),
 	}
 
+	marketData.SetIndicators()
+
 	jsonObject, _ := json.Marshal(marketData)
 	log.Printf("##################################")
 	log.Printf("Sending to Repository: " + string(jsonObject))
