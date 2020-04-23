@@ -9,13 +9,15 @@ import (
 	"os"
 	"smartwallet-api/application/controllers"
 	"smartwallet-api/application/services"
+	"smartwallet-api/infrastructure/repositories"
 )
 
 // Injectors from wire.go:
 
 func ProvideRabbitMQClient() controllers.RabbitMQClient {
 	config := provideConfig()
-	marketDataProcessorService := provideMarketDataProcessor()
+	mongoDBMarketDataRepository := provideMongoDBMarketDataRepository(config)
+	marketDataProcessorService := provideMarketDataProcessor(mongoDBMarketDataRepository)
 	rabbitMQClient := provideRabbitMQClient(config, marketDataProcessorService)
 	return rabbitMQClient
 }
@@ -28,13 +30,21 @@ func provideConfig() Config {
 			ConnectionString: os.Getenv("RABBIT_CONNECTIONSTRING"),
 			QueueName:        os.Getenv("MARKETDATA_QUEUE_NAME"),
 		},
+		MongoDB: MongoDBConfig{
+			ConnectionString: "",
+			Collection:       "",
+		},
 	}
+}
+
+func provideMongoDBMarketDataRepository(c Config) repositories.MongoDBMarketDataRepository {
+	return repositories.NewMongoDBMarketDataRepository(c.MongoDB.ConnectionString, c.MongoDB.Collection)
 }
 
 func provideRabbitMQClient(c Config, m services.MarketDataProcessorService) controllers.RabbitMQClient {
 	return controllers.NewRabbitMQClient(c.RabbitMQ.ConnectionString, m)
 }
 
-func provideMarketDataProcessor() services.MarketDataProcessorService {
-	return services.NewMarketDataProcessorService()
+func provideMarketDataProcessor(m repositories.MongoDBMarketDataRepository) services.MarketDataProcessorService {
+	return services.NewMarketDataProcessorService(m)
 }

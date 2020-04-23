@@ -1,10 +1,10 @@
 package services
 
 import (
-	"log"
 	"smartwallet-api/application/models"
 	mapper "github.com/PeteProgrammer/go-automapper"
 	"smartwallet-api/domain/entities"
+	"smartwallet-api/infrastructure/repositories"
 )
 
 type MarketDataProcessor interface{
@@ -12,15 +12,15 @@ type MarketDataProcessor interface{
 }
 
 type MarketDataProcessorService struct{
-
+	MarketDataRepository repositories.MarketDataRepository
 }
 
-func NewMarketDataProcessorService() MarketDataProcessorService {
-	return MarketDataProcessorService{}
+func NewMarketDataProcessorService(m repositories.MarketDataRepository) MarketDataProcessorService {
+	return MarketDataProcessorService{MarketDataRepository: m}
 }
 
-func (marketDataProcessor MarketDataProcessorService) Process(marketDataModel models.MarketData){
+func (m MarketDataProcessorService) Process(marketDataModel models.MarketData){
 	var marketData entities.MarketData
 	mapper.Map(marketDataModel, &marketData)
-
+	m.MarketDataRepository.Save(marketData)
 }

@@ -5,6 +5,12 @@ type RabbitMQConfig struct {
 	QueueName        string
 }
 
+type MongoDBConfig struct {
+	ConnectionString string
+	Collection string
+}
+
 type Config struct {
 	RabbitMQ RabbitMQConfig
+	MongoDB MongoDBConfig
 }
