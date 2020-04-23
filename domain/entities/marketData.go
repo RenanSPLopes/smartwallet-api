@@ -68,6 +68,8 @@ type FinancialIndicators struct{
 }
 
 func (m *MarketData) SetIndicators(){
+	var results []Results
+	var stocks []Stock
 	for _, r := range m.Results{
 		for _, s := range m.Stocks{
 			marketIndicators := MarketIndicators{
@@ -77,7 +79,7 @@ func (m *MarketData) SetIndicators(){
 				PriceEBIT: s.calculatePriceEBIT(r.EBIT, m.Market.StocksCount),
 			}
 			s.MarketIndicators = append(s.MarketIndicators, marketIndicators)
-			m.Stocks = append(m.Stocks, s)
+			stocks = append(stocks, s)		
 		}
 		r.FinancialIndicators = FinancialIndicators{
 			MarginEBITDA: r.calculateMarginEBITDA(),
@@ -87,8 +89,11 @@ func (m *MarketData) SetIndicators(){
 			DebitToEBITDA: r.calculateDebitToEBITDA(m.BalanceSheet.NetDebt),
 			DebitToEBIT: r.calculateDebitToEBIT(m.BalanceSheet.NetDebt),
 		}
-		m.Results = append(m.Results, r)
+		results = append(results, r)
 	}
+
+	m.Results = results
+	m.Stocks = stocks
 
 	jsonTest, _ := json.Marshal(m)
 	log.Printf("After : " + string(jsonTest))
