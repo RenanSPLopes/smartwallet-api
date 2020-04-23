@@ -4,8 +4,7 @@ import (
 	"smartwallet-api/domain/entities"
 	"smartwallet-api/infrastructure/dtos"
 	mapper "github.com/PeteProgrammer/go-automapper"
-	"log"
-	"encoding/json"
+
 )
 
 type MarketDataRepository interface {
@@ -24,10 +23,4 @@ func NewMongoDBMarketDataRepository(conectionString string, collection string) M
 func (m MongoDBMarketDataRepository) Save(marketData entities.MarketData){
 	var marketDataDto dtos.MarketData
 	mapper.Map(marketData, &marketDataDto)
-
-	jsonMessage, err := json.Marshal(marketDataDto)
-	if err != nil {
-		log.Fatal(err)
-	}
-	log.Printf("Saved message " + string(jsonMessage))
 }
