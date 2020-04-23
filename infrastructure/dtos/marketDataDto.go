@@ -18,6 +18,8 @@ type Stock struct {
 	Code string 
 	Type string 
 	Quotes float32 
+	MarketIndicators MarketIndicators
+	FinancialIndicators FinancialIndicators
 }
 
 type BalanceSheet struct {
@@ -45,10 +47,10 @@ type Market struct {
 }
 
 type MarketIndicators struct{
-	PriceEarningsRatio float64
-	PriceAssetValue float64
-	PriceEBITDA float64
-	PriceEBIT float64
+	PriceEarningsRatio float32
+	PriceAssetValue float32
+	PriceEBITDA float32
+	PriceEBIT float32
 }
 
 type FinancialIndicators struct{
@@ -56,6 +58,6 @@ type FinancialIndicators struct{
 	MarginEBIT float32
 	NetMargin float32
 	ROE float32
-	DebitToPriceEarningsRation float32
 	DebitToEBITDA float32
+	DebitToEBIT float32
 }

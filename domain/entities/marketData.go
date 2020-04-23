@@ -18,6 +18,7 @@ type Stock struct {
 	Code string 
 	Type string 
 	Quotes float32 
+	MarketIndicators []MarketIndicators
 }
 
 type BalanceSheet struct {
@@ -36,118 +37,91 @@ type Result struct {
 	DepreciationAndAmortization float64
 	EBIT                        float64
 	NetProfit                   float64
+	FinancialIndicators FinancialIndicators
 }
 
 type Market struct {
 	MarketValue     float64
 	EnterpriseValue float64
-	Stocks          float64
+	StocksCount          float64
 }
 
-func (m MarketData) CalculePriceEarningsRatios() []float32{
-	var priceEarningsRatios []float32
-	for _, s := range m.Stocks{
-		for _, r := range m.Results {
-			priceEarningsRatio := s.Quotes/ float32(r.NetProfit/ m.Market.Stocks)
-			priceEarningsRatios = append(priceEarningsRatios, priceEarningsRatio)
+type MarketIndicators struct{
+	PriceEarningsRatio float32
+	PriceAssetValue float32
+	PriceEBITDA float32
+	PriceEBIT float32
+}
+
+type FinancialIndicators struct{
+	MarginEBITDA float32
+	MarginEBIT float32
+	NetMargin float32
+	ROE float32
+	DebitToEBITDA float32
+	DebitToEBIT float32
+}
+
+func (m MarketData) SetIndicators(){
+	for _, r := range m.Results{
+		for _, s := range m.Stocks{
+			marketIndicators := MarketIndicators{
+				PriceEarningsRatio: s.calculePriceEarningsRatio(r.NetProfit, m.Market.StocksCount),
+				PriceAssetValue: s.calculatePriceAssetValue(m.BalanceSheet.NetEquity, m.Market.StocksCount),
+				PriceEBITDA: s.calculatePriceEBITDA(r.EBITDA, m.Market.StocksCount),
+				PriceEBIT: s.calculatePriceEBIT(r.EBIT, m.Market.StocksCount),
+			}
+			s.MarketIndicators = append(s.MarketIndicators, marketIndicators)
+		}
+		r.FinancialIndicators = FinancialIndicators{
+			MarginEBITDA: r.calculateMarginEBITDA(),
+			MarginEBIT: r.calculateMarginEBIT(),
+			NetMargin: r.calculateNetMargin(),
+			ROE: r.calculateROE(m.BalanceSheet.NetEquity),
+			DebitToEBITDA: r.calculateDebitToEBITDA(m.BalanceSheet.NetDebt),
+			DebitToEBIT: r.calculateDebitToEBIT(m.BalanceSheet.NetDebt),
 		}
 	}
-
-	return priceEarningsRatios
 }
 
-func (m MarketData) CalculatePriceEBITs()[]float32{
-	var priceEBITs []float32
-	for _, s := range m.Stocks{
-		for _, r := range m.Results{
-			priceEBIT := s.Quotes/ float32(r.EBIT / m.Market.Stocks)
-			priceEBITs = append(priceEBITs, priceEBIT)
-		}
-	}
-
-	return priceEBITs
+func (s Stock) calculePriceEarningsRatio(netProfit float64 ,  stocksCount float64) float32{
+	return s.Quotes/ float32(netProfit/ stocksCount)
 }
 
-func (m MarketData) CalculatePriceEBITDAs()[]float32{
-	var priceEBITDAs []float32
-	for _, s := range m.Stocks{
-		for _, r := range m.Results{
-			priceEBITDA := s.Quotes/ float32(r.EBITDA / m.Market.Stocks)
-			priceEBITDAs = append(priceEBITDAs, priceEBITDA)
-		}
-	}
-
-	return priceEBITDAs
+func (s Stock) calculatePriceAssetValue(netEquity float64, stocksCount float64) float32{
+	return s.Quotes/ float32(netEquity/ stocksCount)
 }
 
-func (m MarketData) CalculatePriceAssetValues() []float32{
-	var priceAssetValues []float32
-	for _, s := range m.Stocks{
-			priceAssetValue := s.Quotes/ float32(m.BalanceSheet.NetEquity/ m.Market.Stocks)
-			priceAssetValues = append(priceAssetValues, priceAssetValue)
-	}
-
-	return priceAssetValues
+func (s Stock) calculatePriceEBITDA(ebitda float64, stocksCount float64) float32{
+	return s.Quotes/ float32(ebitda / stocksCount)
 }
 
-func (m MarketData) CalculateROEs()[]float32{
-	var roes []float32
-	for _, r := range m.Results{
-		roe := float32(r.NetProfit/m.BalanceSheet.NetEquity)
-		roes = append(roes, roe)
-	}
-
-	return roes
+func (s Stock) calculatePriceEBIT(ebit float64, stocksCount float64) float32{
+	return s.Quotes/ float32(ebit / stocksCount)
 }
 
-func (m MarketData) CalculateDebitToPriceEarningsRatios() []float32{
-	var debitPriceEarningsRatios []float32
-	priceEarningsRatios := m.CalculePriceEarningsRatios()
-	for _, per := range priceEarningsRatios{
-		debitPriceEarningsRatio := float32(m.BalanceSheet.NetDebt)/ per
-		debitPriceEarningsRatios = append(debitPriceEarningsRatios, debitPriceEarningsRatio)
-	}
-
-	return debitPriceEarningsRatios
-	
+func (r Result) calculateROE(netEquity float64)float32{
+	return float32(r.NetProfit/netEquity)
 }
 
-func (m MarketData) CalculateDebitToEBITDA()[]float32{
-	var debitToEBITDAs []float32
-	for _, r := range m.Results{
-		debitToEBITDA := float32(m.BalanceSheet.NetDebt/ r.EBITDA)
-		debitToEBITDAs = append(debitToEBITDAs, debitToEBITDA)
-	}
-
-	return debitToEBITDAs
+func (r Result) calculateDebitToEBITDA(netDebt float64)float32{
+	return float32(netDebt/ r.EBITDA)
 }
 
-func (m MarketData) CalculateMarginEBITDA()[]float32{
-	var marginEBITDAs []float32
-	for _, r := range m.Results{
-		marginEBITDA := float32(r.NetIncome/r.EBITDA)
-		marginEBITDAs = append(marginEBITDAs, marginEBITDA)
-	}
-
-	return marginEBITDAs
+func (r Result) calculateDebitToEBIT(netDebt float64)float32{
+	return float32(netDebt/ r.EBIT)
 }
 
-func (m MarketData) CalculateMarginEBIT()[]float32{
-	var marginEBITs []float32
-	for _, r := range m.Results{
-		marginEBIT := float32(r.NetIncome/r.EBIT)
-		marginEBITs = append(marginEBITs, marginEBIT)
-	}
-
-	return marginEBITs
+func (r Result) calculateMarginEBITDA()float32{
+	return float32(r.NetIncome/r.EBITDA)
 }
 
-func (m MarketData) CalculateNetMargin()[]float32{
-	var netMargins []float32
-	for _, r := range m.Results{
-		netMargin := float32(r.NetProfit/r.NetIncome)
-		netMargins = append(netMargins, netMargin)
-	}
-
-	return netMargins
+func (r Result) calculateMarginEBIT()float32{
+	return float32(r.NetIncome/r.EBIT)
 }
+
+func (r Result) calculateNetMargin() float32{
+	return float32(r.NetProfit/r.NetIncome)
+}
+
+
