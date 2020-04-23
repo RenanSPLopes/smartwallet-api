@@ -68,7 +68,7 @@ type FinancialIndicators struct{
 }
 
 func (m *MarketData) SetIndicators(){
-	var results []Results
+	var results []Result
 	var stocks []Stock
 	for _, r := range m.Results{
 		for _, s := range m.Stocks{
