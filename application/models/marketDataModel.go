@@ -41,5 +41,5 @@ type Result struct {
 type Market struct {
 	MarketValue     float64 `json:"marketValue"`
 	EnterpriseValue float64 `json:"enterpriseValue"`
-	Stocks          float64 `json:"stocks"`
+	StocksCount          float64 `json:"stocksCount"`
 }
