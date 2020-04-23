@@ -15,7 +15,7 @@ type MarketData struct {
 }
 
 type Stock struct {
-	Code string `json:"id"`
+	Code string `json:"code"`
 	Type string `json:"type"`
 	Quotes float32 `json:"quotes"`
 }
