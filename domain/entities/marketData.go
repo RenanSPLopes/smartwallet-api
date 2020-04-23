@@ -70,7 +70,6 @@ type FinancialIndicators struct{
 func (m *MarketData) SetIndicators(){
 	for _, r := range m.Results{
 		for _, s := range m.Stocks{
-			log.Printf("Ações")
 			marketIndicators := MarketIndicators{
 				PriceEarningsRatio: s.calculePriceEarningsRatio(r.NetProfit, m.Market.StocksCount),
 				PriceAssetValue: s.calculatePriceAssetValue(m.BalanceSheet.NetEquity, m.Market.StocksCount),
@@ -78,6 +77,7 @@ func (m *MarketData) SetIndicators(){
 				PriceEBIT: s.calculatePriceEBIT(r.EBIT, m.Market.StocksCount),
 			}
 			s.MarketIndicators = append(s.MarketIndicators, marketIndicators)
+			m.Stocks = append(m.Stocks, s)
 		}
 		r.FinancialIndicators = FinancialIndicators{
 			MarginEBITDA: r.calculateMarginEBITDA(),
@@ -87,6 +87,7 @@ func (m *MarketData) SetIndicators(){
 			DebitToEBITDA: r.calculateDebitToEBITDA(m.BalanceSheet.NetDebt),
 			DebitToEBIT: r.calculateDebitToEBIT(m.BalanceSheet.NetDebt),
 		}
+		m.Results = append(m.Results, r)
 	}
 
 	jsonTest, _ := json.Marshal(m)
