@@ -20,8 +20,8 @@ func NewMarketDataProcessorService(m repositories.MarketDataRepository) MarketDa
 }
 
 func (m MarketDataProcessorService) Process(marketDataModel models.MarketData){
-	var marketData *entities.MarketData
+	var marketData entities.MarketData
 	mapper.MapLoose(marketDataModel, &marketData)
 	marketData.SetIndicators()
-	m.MarketDataRepository.Save(*marketData)
+	m.MarketDataRepository.Save(marketData)
 }

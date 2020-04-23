@@ -1,5 +1,10 @@
 package entities
 
+import (
+    "log"
+    "encoding/json"
+)
+
 type MarketData struct {
 	Name           string
 	Sector         string
@@ -64,7 +69,9 @@ type FinancialIndicators struct{
 
 func (m *MarketData) SetIndicators(){
 	for _, r := range m.Results{
+		log.Printf("Resultados...")
 		for _, s := range m.Stocks{
+			log.Printf("Ações")
 			marketIndicators := MarketIndicators{
 				PriceEarningsRatio: s.calculePriceEarningsRatio(r.NetProfit, m.Market.StocksCount),
 				PriceAssetValue: s.calculatePriceAssetValue(m.BalanceSheet.NetEquity, m.Market.StocksCount),
@@ -72,6 +79,15 @@ func (m *MarketData) SetIndicators(){
 				PriceEBIT: s.calculatePriceEBIT(r.EBIT, m.Market.StocksCount),
 			}
 			s.MarketIndicators = append(s.MarketIndicators, marketIndicators)
+			json := json.Marshal(s.MarketIndicators) 
+			
+			log.Prinf("#########################################")
+			log.Prinf("Created MarketIndicator")
+			log.Prinf("#########################################")
+			log.Prinf("-----------------------------------------")
+			log.Prinf("#########################################")
+			log.Printf("Added MarketIndicator: " + string(json))
+			log.Prinf("#########################################")
 		}
 		r.FinancialIndicators = FinancialIndicators{
 			MarginEBITDA: r.calculateMarginEBITDA(),
