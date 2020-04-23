@@ -18,8 +18,7 @@ type Stock struct {
 	Code string 
 	Type string 
 	Quotes float32 
-	MarketIndicators MarketIndicators
-	FinancialIndicators FinancialIndicators
+	MarketIndicators []MarketIndicators
 }
 
 type BalanceSheet struct {
@@ -38,12 +37,13 @@ type Result struct {
 	DepreciationAndAmortization float64
 	EBIT                        float64
 	NetProfit                   float64
+	FinancialIndicators FinancialIndicators
 }
 
 type Market struct {
 	MarketValue     float64
 	EnterpriseValue float64
-	Stocks          float64
+	StocksCount     float64
 }
 
 type MarketIndicators struct{
