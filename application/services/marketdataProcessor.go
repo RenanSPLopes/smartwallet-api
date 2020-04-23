@@ -22,15 +22,61 @@ func NewMarketDataProcessorService(m repositories.MarketDataRepository) MarketDa
 }
 
 func (m MarketDataProcessorService) Process(marketDataModel models.MarketData){
-	var marketData entities.MarketData
-	mapper.MapLoose(marketDataModel, &marketData)
-	// marketData.SetIndicators()
-	mappedMarketData := &marketData
-	mappedMarketData.SetIndicators()
+	marketData := &entities.MarketData{
+		Name: marketDataModel.Name,
+		Sector: marketDataModel.Sector,
+		SubSector: marketDataModel.SubSector,
+		Segmentation: marketDataModel.Segmentation,
+		B3Segmentation: marketDataModel.B3Segmentation,
+		TagAlong: marketDataModel.TagAlong,
+		FreeFloat: marketDataModel.FreeFloat,
+		Stocks: mapStockFromModel(marketDataModel.Stocks),
+		BalanceSheet: entities.BalanceSheet{
+			TotalAsset: marketDataModel.BalanceSheet.TotalAsset,
+			NetEquity: marketDataModel.BalanceSheet.NetEquity,
+			GrossDebt: marketDataModel.BalanceSheet.GrossDebt,
+			Cash: marketDataModel.BalanceSheet.Cash,
+			NetDebt: marketDataModel.BalanceSheet.NetDebt,
+		},
+		Results: mapResultFromModel(marketDataModel.Results),
+		Market: mapMarketFromModel(marketDataModel.Market),
+	}
 
-	jsonObject, _ := json.Marshal(mappedMarketData)
+	jsonObject, _ := json.Marshal(marketData)
 	log.Printf("##################################")
 	log.Printf("Sending to Repository: " + string(jsonObject))
 	log.Printf("##################################")
-	m.MarketDataRepository.Save(*mappedMarketData)
+	m.MarketDataRepository.Save(*marketData)
+}
+
+func mapMarketFromModel(marketModel models.Market) entities.Market{
+	var market entities.Market
+	mapper.Map(marketModel, &market)
+	return market
+}
+
+func mapResultFromModel(resultsModel []models.Result) []entities.Result{
+	var results []entities.Result
+	for _, r := range resultsModel {
+		var result entities.Result 
+		 mapper.MapLoose(r, &result)
+		 results = append(results, result)
+	}
+
+	return results
+}
+
+func mapStockFromModel(stocksModel []models.Stock) []entities.Stock{
+	var stocks []entities.Stock
+	for _, stockModel  := range stocksModel {
+		stock := entities.Stock{
+			Code: stockModel.Code,
+			Type: stockModel.Type,
+			Quotes: stockModel.Quotes,
+		}
+
+		stocks = append(stocks, stock)
+	}
+	
+	return stocks
 }
