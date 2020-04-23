@@ -79,15 +79,17 @@ func (m *MarketData) SetIndicators(){
 				PriceEBIT: s.calculatePriceEBIT(r.EBIT, m.Market.StocksCount),
 			}
 			s.MarketIndicators = append(s.MarketIndicators, marketIndicators)
-			json := json.Marshal(s.MarketIndicators) 
 			
-			log.Prinf("#########################################")
-			log.Prinf("Created MarketIndicator")
-			log.Prinf("#########################################")
-			log.Prinf("-----------------------------------------")
-			log.Prinf("#########################################")
-			log.Printf("Added MarketIndicator: " + string(json))
-			log.Prinf("#########################################")
+			jsonS, _ := json.Marshal(s.MarketIndicators) 
+			jsonM,_ := json.Marshal(marketIndicators)
+			
+			log.Printf("#########################################")
+			log.Printf("Created MarketIndicator: " + string(jsonM))
+			log.Printf("#########################################")
+			log.Printf("-----------------------------------------")
+			log.Printf("#########################################")
+			log.Printf("Added MarketIndicator: " + string(jsonS))
+			log.Printf("#########################################")
 		}
 		r.FinancialIndicators = FinancialIndicators{
 			MarginEBITDA: r.calculateMarginEBITDA(),
