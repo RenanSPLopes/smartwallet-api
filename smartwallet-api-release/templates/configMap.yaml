@@ -3,4 +3,4 @@ kind: ConfigMap
 metadata:
   name: smartwallet-api-config
 data:
-  mongodb_connectionString: {{  .Values.mongodb_connectionString}}
+  mongodb_connectionString: {{ .Values.mongodb_connectionString }}
