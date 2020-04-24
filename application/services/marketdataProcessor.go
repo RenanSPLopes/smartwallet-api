@@ -30,7 +30,7 @@ func (m MarketDataProcessorService) Process(marketDataModel models.MarketData){
 	log.Printf("##################################")
 	log.Printf("Sending to Repository: " + string(jsonObject))
 	log.Printf("##################################")
-	m.MarketDataRepository.Save(*marketData)
+	m.MarketDataRepository.Save(marketData)
 }
 
 func mapMarketFromModel(marketModel models.Market) entities.Market{
