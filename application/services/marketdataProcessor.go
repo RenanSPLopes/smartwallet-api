@@ -22,26 +22,8 @@ func NewMarketDataProcessorService(m repositories.MarketDataRepository) MarketDa
 }
 
 func (m MarketDataProcessorService) Process(marketDataModel models.MarketData){
-	marketData := &entities.MarketData{
-		Name: marketDataModel.Name,
-		Sector: marketDataModel.Sector,
-		SubSector: marketDataModel.SubSector,
-		Segmentation: marketDataModel.Segmentation,
-		B3Segmentation: marketDataModel.B3Segmentation,
-		TagAlong: marketDataModel.TagAlong,
-		FreeFloat: marketDataModel.FreeFloat,
-		Stocks: mapStockFromModel(marketDataModel.Stocks),
-		BalanceSheet: entities.BalanceSheet{
-			TotalAsset: marketDataModel.BalanceSheet.TotalAsset,
-			NetEquity: marketDataModel.BalanceSheet.NetEquity,
-			GrossDebt: marketDataModel.BalanceSheet.GrossDebt,
-			Cash: marketDataModel.BalanceSheet.Cash,
-			NetDebt: marketDataModel.BalanceSheet.NetDebt,
-		},
-		Results: mapResultFromModel(marketDataModel.Results),
-		Market: mapMarketFromModel(marketDataModel.Market),
-	}
-
+	var marketData entities.MarketData
+	mapper.MapLoose(marketDataModel, &marketData)
 	marketData.SetIndicators()
 
 	jsonObject, _ := json.Marshal(marketData)

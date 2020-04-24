@@ -1,10 +1,5 @@
 package entities
 
-import (
-    "log"
-    "encoding/json"
-)
-
 type MarketData struct {
 	Name           string
 	Sector         string
@@ -94,9 +89,6 @@ func (m *MarketData) SetIndicators(){
 
 	m.Results = results
 	m.Stocks = stocks
-
-	jsonTest, _ := json.Marshal(m)
-	log.Printf("After : " + string(jsonTest))
 }
 
 func (s Stock) calculePriceEarningsRatio(netProfit float64 ,  stocksCount float64) float32{
