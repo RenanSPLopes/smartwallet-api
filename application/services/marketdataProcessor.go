@@ -5,8 +5,6 @@ import (
 	mapper "github.com/PeteProgrammer/go-automapper"
 	"smartwallet-api/domain/entities"
 	"smartwallet-api/infrastructure/repositories"
-	"log"
-	"encoding/json"
 )
 
 type MarketDataProcessor interface{
@@ -24,12 +22,9 @@ func NewMarketDataProcessorService(m repositories.MarketDataRepository) MarketDa
 func (m MarketDataProcessorService) Process(marketDataModel models.MarketData){
 	var marketData entities.MarketData
 	mapper.MapLoose(marketDataModel, &marketData)
+	
 	marketData.SetIndicators()
-
-	jsonObject, _ := json.Marshal(marketData)
-	log.Printf("##################################")
-	log.Printf("Sending to Repository: " + string(jsonObject))
-	log.Printf("##################################")
+	
 	m.MarketDataRepository.Save(marketData)
 }
 

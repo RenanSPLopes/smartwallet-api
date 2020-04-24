@@ -17,14 +17,13 @@ func provideConfig() Config {
 			QueueName:        os.Getenv("MARKETDATA_QUEUE_NAME"),
 		},
 		MongoDB: MongoDBConfig {
-			ConnectionString: "",
-			Collection: "",
+			ConnectionString: os.Getenv("MONGODB_CONNECTIONSTRING"),
 		},
 	}
 }
 
 func provideMongoDBMarketDataRepository(c Config) repositories.MongoDBMarketDataRepository{
-	return repositories.NewMongoDBMarketDataRepository(c.MongoDB.ConnectionString, c.MongoDB.Collection)
+	return repositories.NewMongoDBMarketDataRepository(c.MongoDB.ConnectionString)
 }
 
 func provideRabbitMQClient(c Config, m services.MarketDataProcessorService) controllers.RabbitMQClient {

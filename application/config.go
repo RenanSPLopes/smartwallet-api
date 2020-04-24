@@ -7,7 +7,6 @@ type RabbitMQConfig struct {
 
 type MongoDBConfig struct {
 	ConnectionString string
-	Collection string
 }
 
 type Config struct {
