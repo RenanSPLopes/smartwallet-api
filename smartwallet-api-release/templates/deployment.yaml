@@ -28,6 +28,11 @@ spec:
             configMapKeyRef:
               name: marketdata-api-config
               key: rabbitmq_marketdata_queue_name
+        - name: MONGODB_CONNECTIONSTRING
+          valueFrom:
+            configMapKeyRef:
+              name: smartwallet-api-config
+              key: mongodb_connectionString
         ports:
         - containerPort: 19000
           name: smartwallet-api
