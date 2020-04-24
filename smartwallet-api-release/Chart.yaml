@@ -2,4 +2,4 @@ apiVersion: v1
 appVersion: "0.0.1"
 description: SmartwalletApi chart 0.0.1
 name: smartwallet-api-release
-version: 0.1.0
+version: 0.2.0
