@@ -2,7 +2,7 @@ package main
 
 func main() {
 	r := registerRoutes()
-	r.Run(":19000")
+	r.Run(":19001")
 
 	config := provideConfig()
 	rabbitmqClient := ProvideRabbitMQClient()
