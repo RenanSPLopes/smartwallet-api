@@ -7,5 +7,5 @@ func main() {
 	rabbitmqClient := ProvideRabbitMQClient()
 	rabbitmqClient.Listen(config.RabbitMQ.QueueName)
 
-	r.Run(":19000")
+	r.Run(":19001")
 }

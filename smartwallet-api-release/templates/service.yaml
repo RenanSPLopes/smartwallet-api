@@ -8,4 +8,4 @@ spec:
   ports:
   - protocol: TCP
     port: 80
-    targetPort: 19000
+    targetPort: 19001

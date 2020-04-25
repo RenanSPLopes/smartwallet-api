@@ -34,5 +34,5 @@ spec:
               name: smartwallet-api-config
               key: mongodb_connectionString
         ports:
-        - containerPort: 19000
+        - containerPort: 19001
           name: smartwallet-api
