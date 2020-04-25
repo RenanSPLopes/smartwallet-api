@@ -1,6 +1,11 @@
 package models
 
+import (
+	"go.mongodb.org/mongo-driver/bson/primitive"
+)
+
 type MarketData struct {
+	ID				primitive.ObjectID
 	Name           string       
 	Sector         string       
 	SubSector      string       

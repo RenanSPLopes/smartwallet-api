@@ -3,27 +3,28 @@ package repositories
 import (
 	"context"
 	"fmt"
+	mapper "github.com/PeteProgrammer/go-automapper"
+	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
 	"log"
 	"smartwallet-api/domain/entities"
 	"smartwallet-api/infrastructure/dtos"
 	"time"
-
-	mapper "github.com/PeteProgrammer/go-automapper"
-	"go.mongodb.org/mongo-driver/mongo"
-	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
 type MarketDataRepository interface {
 	Save(marketData entities.MarketData)
+	GetAll() []dtos.MarketData
 }
 
 type MongoDBMarketDataRepository struct {
 	ConnectionString string
 }
 
-func NewMongoDBMarketDataRepository(conectionString string) MongoDBMarketDataRepository {
+func NewMongoDBMarketDataRepository(conectionString string) *MongoDBMarketDataRepository {
 	log.Printf("ConnectionString: " + conectionString)
-	return MongoDBMarketDataRepository{ConnectionString: conectionString}
+	return &MongoDBMarketDataRepository{ConnectionString: conectionString}
 }
 
 func (m MongoDBMarketDataRepository) Save(marketData entities.MarketData) {
@@ -43,6 +44,28 @@ func (m MongoDBMarketDataRepository) Save(marketData entities.MarketData) {
 	}
 
 	fmt.Println(result.InsertedID)
+}
+
+func (m MongoDBMarketDataRepository) GetAll() []dtos.MarketData {
+	client, ctx := m.createClient()
+	defer client.Disconnect(ctx)
+
+	database := client.Database("SmartWallet")
+	marketDataCollection := database.Collection("marketdata")
+
+	cursor, err := marketDataCollection.Find(ctx, bson.M{})
+	if err != nil {
+		log.Fatal(err)
+		panic(err)
+	}
+
+	var marketData []dtos.MarketData
+	if err = cursor.All(ctx, &marketData); err != nil {
+		log.Fatal(err)
+		panic(err)
+	}
+
+	return marketData
 }
 
 func (m MongoDBMarketDataRepository) createClient() (*mongo.Client, context.Context) {

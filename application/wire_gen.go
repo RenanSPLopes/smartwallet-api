@@ -6,6 +6,7 @@
 package main
 
 import (
+	"github.com/google/wire"
 	"os"
 	"smartwallet-api/application/controllers"
 	"smartwallet-api/application/services"
@@ -22,6 +23,13 @@ func ProvideRabbitMQClient() controllers.RabbitMQClient {
 	return rabbitMQClient
 }
 
+func ProvideMarketDataController() controllers.MarketDataController {
+	config := provideConfig()
+	mongoDBMarketDataRepository := provideMongoDBMarketDataRepository(config)
+	marketDataController := controllers.NewMarketDataController(mongoDBMarketDataRepository)
+	return marketDataController
+}
+
 // wire.go:
 
 func provideConfig() Config {
@@ -36,7 +44,7 @@ func provideConfig() Config {
 	}
 }
 
-func provideMongoDBMarketDataRepository(c Config) repositories.MongoDBMarketDataRepository {
+func provideMongoDBMarketDataRepository(c Config) *repositories.MongoDBMarketDataRepository {
 	return repositories.NewMongoDBMarketDataRepository(c.MongoDB.ConnectionString)
 }
 
@@ -44,6 +52,9 @@ func provideRabbitMQClient(c Config, m services.MarketDataProcessorService) cont
 	return controllers.NewRabbitMQClient(c.RabbitMQ.ConnectionString, m)
 }
 
-func provideMarketDataProcessor(m repositories.MongoDBMarketDataRepository) services.MarketDataProcessorService {
-	return services.NewMarketDataProcessorService(m)
+func provideMarketDataProcessor(m *repositories.MongoDBMarketDataRepository) services.MarketDataProcessorService {
+	return services.NewMarketDataProcessorService(*m)
 }
+
+var marketDataRepositorySet = wire.NewSet(
+	provideMongoDBMarketDataRepository, wire.Bind(new(repositories.MarketDataRepository), new(*repositories.MongoDBMarketDataRepository)))
