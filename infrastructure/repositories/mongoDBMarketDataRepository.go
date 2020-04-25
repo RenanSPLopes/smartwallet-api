@@ -11,6 +11,7 @@ import (
 	"smartwallet-api/domain/entities"
 	"smartwallet-api/infrastructure/dtos"
 	"time"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 type MarketDataRepository interface {
@@ -29,7 +30,7 @@ func NewMongoDBMarketDataRepository(conectionString string) *MongoDBMarketDataRe
 func (m MongoDBMarketDataRepository) Save(marketData entities.MarketData) {
 	var marketDataDto dtos.MarketData
 	mapper.MapLoose(marketData, &marketDataDto)
-
+	marketDataDto.ID = 	primitive.NewObjectID()
 	client, ctx := m.createClient()
 	defer client.Disconnect(ctx)
 
