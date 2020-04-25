@@ -23,7 +23,6 @@ type MongoDBMarketDataRepository struct {
 }
 
 func NewMongoDBMarketDataRepository(conectionString string) *MongoDBMarketDataRepository {
-	log.Printf("ConnectionString: " + conectionString)
 	return &MongoDBMarketDataRepository{ConnectionString: conectionString}
 }
 
