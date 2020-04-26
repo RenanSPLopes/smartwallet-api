@@ -57,8 +57,8 @@ func (m MongoDBMarketDataRepository) GetAll() []dtos.MarketData {
 	projection := bson.D{
 		{"name", 1},
 		{"sector", 1},
-		{"subSector", 1},
-		{"b3Segmentation", 1},
+		{"subsector", 1},
+		{"b3segmentation", 1},
 	}
 
 	cursor, err := marketDataCollection.Find(ctx, bson.M{}, options.Find().SetProjection(projection))
