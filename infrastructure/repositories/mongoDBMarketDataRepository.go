@@ -3,15 +3,16 @@ package repositories
 import (
 	"context"
 	"fmt"
-	mapper "github.com/PeteProgrammer/go-automapper"
-	"go.mongodb.org/mongo-driver/bson"
-	"go.mongodb.org/mongo-driver/mongo"
-	"go.mongodb.org/mongo-driver/mongo/options"
 	"log"
 	"smartwallet-api/domain/entities"
 	"smartwallet-api/infrastructure/dtos"
 	"time"
+
+	mapper "github.com/PeteProgrammer/go-automapper"
+	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
+	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
 type MarketDataRepository interface {
@@ -30,7 +31,7 @@ func NewMongoDBMarketDataRepository(conectionString string) *MongoDBMarketDataRe
 func (m MongoDBMarketDataRepository) Save(marketData entities.MarketData) {
 	var marketDataDto dtos.MarketData
 	mapper.MapLoose(marketData, &marketDataDto)
-	marketDataDto.ID = 	primitive.NewObjectID()
+	marketDataDto.ID = primitive.NewObjectID()
 	client, ctx := m.createClient()
 	defer client.Disconnect(ctx)
 
@@ -53,7 +54,14 @@ func (m MongoDBMarketDataRepository) GetAll() []dtos.MarketData {
 	database := client.Database("SmartWallet")
 	marketDataCollection := database.Collection("marketdata")
 
-	cursor, err := marketDataCollection.Find(ctx, bson.M{})
+	projection := bson.D{
+		{"Name", 1},
+		{"Sector", 1},
+		{"SubSector", 1},
+		{"B3Segmentation", 1},
+	}
+
+	cursor, err := marketDataCollection.Find(ctx, bson.M{}, options.Find().SetProjection(projection))
 	if err != nil {
 		log.Fatal(err)
 		panic(err)
