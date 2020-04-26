@@ -13,8 +13,8 @@ type MarketData struct {
 	B3Segmentation string
 	TagAlong       string    `json:",omitempty"`
 	FreeFloat      string    `json:",omitempty"`
-	Stocks         *[]Stock  `json:",omitempty"`
-	Results        *[]Result `json:",omitempty"`
+	Stocks         []*Stock  `json:",omitempty"`
+	Results        []*Result `json:",omitempty"`
 }
 
 type Stock struct {
