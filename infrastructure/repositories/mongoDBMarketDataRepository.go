@@ -58,6 +58,7 @@ func (m MongoDBMarketDataRepository) GetAll() []dtos.MarketData {
 		{"name", 1},
 		{"sector", 1},
 		{"subsector", 1},
+		{"segmentation", 1},
 		{"b3segmentation", 1},
 	}
 
