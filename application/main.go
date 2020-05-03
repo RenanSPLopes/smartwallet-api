@@ -1,10 +1,14 @@
 package main
 
 func main() {
+	config := provideConfig()
+	go initializeRabbitMq(config)
+
 	r := registerRoutes()
 	r.Run(":19001")
+}
 
-	config := provideConfig()
+func initializeRabbitMq(c Config) {
 	rabbitmqClient := ProvideRabbitMQClient()
-	rabbitmqClient.Listen(config.RabbitMQ.QueueName)
+	rabbitmqClient.Listen(c.RabbitMQ.QueueName)
 }
