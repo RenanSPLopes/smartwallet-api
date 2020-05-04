@@ -18,6 +18,7 @@ import (
 type MarketDataRepository interface {
 	Save(marketData entities.MarketData)
 	GetAll() []dtos.MarketData
+	GetById(id string) dtos.MarketData
 }
 
 type MongoDBMarketDataRepository struct {
@@ -75,6 +76,31 @@ func (m MongoDBMarketDataRepository) GetAll() []dtos.MarketData {
 	}
 
 	return marketData
+}
+
+func (m MongoDBMarketDataRepository) GetById(id string) dtos.MarketData {
+	client, ctx := m.createClient()
+	defer client.Disconnect(ctx)
+
+	database := client.Database("SmartWallet")
+	marketDataCollection := database.Collection("marketdata")
+
+	_id, err := primitive.ObjectIDFromHex(id)
+
+	if err != nil {
+		log.Fatal(err)
+		panic(err)
+	}
+	var result dtos.MarketData
+
+	err = marketDataCollection.FindOne(ctx, bson.M{"_id": _id}).Decode(&result)
+
+	if err != nil {
+		log.Fatal(err)
+		panic(err)
+	}
+
+	return result
 }
 
 func (m MongoDBMarketDataRepository) createClient() (*mongo.Client, context.Context) {

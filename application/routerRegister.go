@@ -12,6 +12,7 @@ func registerRoutes() *gin.Engine {
 
 	marketDataController := ProvideMarketDataController()
 	r.GET("/marketdata", marketDataController.GetAll)
+	r.GET("/marketdata/:id", marketDataController.GetById)
 	
 	return r
 }

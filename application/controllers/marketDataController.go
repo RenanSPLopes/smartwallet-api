@@ -1,10 +1,11 @@
 package controllers
 
 import (
-	mapper "github.com/PeteProgrammer/go-automapper"
-	"github.com/gin-gonic/gin"
 	"smartwallet-api/application/models"
 	"smartwallet-api/infrastructure/repositories"
+
+	mapper "github.com/PeteProgrammer/go-automapper"
+	"github.com/gin-gonic/gin"
 )
 
 type MarketDataController struct {
@@ -21,4 +22,19 @@ func (controller *MarketDataController) GetAll(c *gin.Context) {
 	mapper.Map(dtos, &model)
 
 	c.JSON(200, model)
+}
+
+type MarketData struct {
+	ID string `uri:"id" binding:"required"`
+}
+
+func (controller *MarketDataController) GetById(c *gin.Context) {
+	var marketData MarketData
+	if err := c.ShouldBindUri(&marketData); err != nil {
+		c.JSON(400, gin.H{"msg": err})
+		return
+	}
+
+	dto := controller.MarketDataRepository.GetById(marketData.ID)
+	c.JSON(200, dto)
 }
