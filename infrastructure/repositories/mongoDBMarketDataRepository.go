@@ -133,7 +133,7 @@ func (m MongoDBMarketDataRepository) UpdateQuotes(code string, quote float32) {
 	defer client.Disconnect(ctx)
 
 	filter := bson.M{"stocks.code": bson.M{"$eq": code}}
-	change := bson.M{"$set": bson.M{"stocks.quote": quote}}
+	change := bson.M{"$set": bson.M{"stocks.quotes": quote}}
 
 	_, err := marketDataCollection.UpdateOne(ctx, filter, change)
 
