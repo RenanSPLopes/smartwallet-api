@@ -1,5 +1,7 @@
 package entities
 
+import "strings"
+
 type MarketData struct {
 	Name           string
 	Sector         string
@@ -70,7 +72,6 @@ func (m *MarketData) CalculateResultIndicators() {
 	var results []Result
 
 	r := m.Results[0]
-
 	r.FinancialIndicators = FinancialIndicators{
 		MarginEBITDA:  r.OperatingResults.calculateMarginEBITDA(),
 		MarginEBIT:    r.OperatingResults.calculateMarginEBIT(),
@@ -95,6 +96,8 @@ func (m *MarketData) CalculateStocksIndicators() {
 			PriceEBITDA:        s.calculatePriceEBITDA(r.OperatingResults.EBITDA, r.Market.StocksCount),
 			PriceEBIT:          s.calculatePriceEBIT(r.OperatingResults.EBIT, r.Market.StocksCount),
 		}
+
+		s.Code = strings.ToUpper(s.Code)
 		s.MarketIndicators = append(s.MarketIndicators, marketIndicators)
 		stocks = append(stocks, s)
 	}

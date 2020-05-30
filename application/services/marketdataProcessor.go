@@ -1,6 +1,7 @@
 package services
 
 import (
+	"log"
 	"smartwallet-api/application/models"
 	"smartwallet-api/domain/entities"
 	"smartwallet-api/infrastructure/repositories"
@@ -23,6 +24,13 @@ func NewMarketDataProcessorService(m repositories.MarketDataRepository) MarketDa
 func (m MarketDataProcessorService) Process(marketDataModel models.MarketData) {
 	var marketData entities.MarketData
 	mapper.MapLoose(marketDataModel, &marketData)
+
+	marketDataFromDb := m.MarketDataRepository.GetByCode(marketData.Stocks[0].Code)
+
+	if marketDataFromDb.Name != "" {
+		log.Println("Entity already founded on database.")
+		return
+	}
 
 	marketData.CalculateResultIndicators()
 	marketData.CalculateStocksIndicators()

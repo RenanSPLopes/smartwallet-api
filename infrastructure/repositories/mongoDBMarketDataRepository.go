@@ -19,6 +19,7 @@ type MarketDataRepository interface {
 	Save(marketData entities.MarketData)
 	GetAll() []dtos.MarketData
 	GetById(id string) dtos.MarketData
+	GetByCode(code string) dtos.MarketData
 }
 
 type MongoDBMarketDataRepository struct {
@@ -33,12 +34,10 @@ func (m MongoDBMarketDataRepository) Save(marketData entities.MarketData) {
 	var marketDataDto dtos.MarketData
 	mapper.MapLoose(marketData, &marketDataDto)
 	marketDataDto.ID = primitive.NewObjectID()
-	client, ctx := m.createClient()
-	defer client.Disconnect(ctx)
 
-	database := client.Database("SmartWallet")
-	marketdataCollection := database.Collection("marketdata")
-	result, err := marketdataCollection.InsertOne(ctx, marketDataDto)
+	ctx, client, marketDataCollection := m.GetMarketDataCollection()
+	defer client.Disconnect(ctx)
+	result, err := marketDataCollection.InsertOne(ctx, marketDataDto)
 
 	if err != nil {
 		log.Fatal(err)
@@ -49,11 +48,8 @@ func (m MongoDBMarketDataRepository) Save(marketData entities.MarketData) {
 }
 
 func (m MongoDBMarketDataRepository) GetAll() []dtos.MarketData {
-	client, ctx := m.createClient()
+	ctx, client, marketDataCollection := m.GetMarketDataCollection()
 	defer client.Disconnect(ctx)
-
-	database := client.Database("SmartWallet")
-	marketDataCollection := database.Collection("marketdata")
 
 	projection := bson.D{
 		{"name", 1},
@@ -79,11 +75,8 @@ func (m MongoDBMarketDataRepository) GetAll() []dtos.MarketData {
 }
 
 func (m MongoDBMarketDataRepository) GetById(id string) dtos.MarketData {
-	client, ctx := m.createClient()
+	ctx, client, marketDataCollection := m.GetMarketDataCollection()
 	defer client.Disconnect(ctx)
-
-	database := client.Database("SmartWallet")
-	marketDataCollection := database.Collection("marketdata")
 
 	_id, err := primitive.ObjectIDFromHex(id)
 
@@ -101,6 +94,30 @@ func (m MongoDBMarketDataRepository) GetById(id string) dtos.MarketData {
 	}
 
 	return result
+}
+
+func (m MongoDBMarketDataRepository) GetByCode(code string) dtos.MarketData {
+	ctx, client, marketDataCollection := m.GetMarketDataCollection()
+	defer client.Disconnect(ctx)
+
+	var result dtos.MarketData
+	err := marketDataCollection.FindOne(ctx, bson.D{{"stocks.code", code}}).Decode(&result)
+
+	if err != nil && err != bson.ErrNilRegistry {
+		log.Fatal("Erro getting marketData by code. " + err.Error())
+		panic(err.Error())
+	}
+
+	return result
+}
+
+func (m MongoDBMarketDataRepository) GetMarketDataCollection() (context.Context, *mongo.Client, *mongo.Collection) {
+	client, ctx := m.createClient()
+
+	database := client.Database("SmartWallet")
+	marketDataCollection := database.Collection("marketdata")
+
+	return ctx, client, marketDataCollection
 }
 
 func (m MongoDBMarketDataRepository) createClient() (*mongo.Client, context.Context) {
