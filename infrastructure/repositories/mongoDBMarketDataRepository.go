@@ -20,6 +20,7 @@ type MarketDataRepository interface {
 	GetAll() []dtos.MarketData
 	GetById(id string) dtos.MarketData
 	GetByCode(code string) dtos.MarketData
+	UpdateResults(id primitive.ObjectID, marketData entities.MarketData)
 }
 
 type MongoDBMarketDataRepository struct {
@@ -81,8 +82,8 @@ func (m MongoDBMarketDataRepository) GetById(id string) dtos.MarketData {
 	_id, err := primitive.ObjectIDFromHex(id)
 
 	if err != nil {
-		log.Fatal(err)
-		panic(err)
+		log.Fatal(err.Error())
+		panic(err.Error())
 	}
 	var result dtos.MarketData
 
@@ -109,6 +110,21 @@ func (m MongoDBMarketDataRepository) GetByCode(code string) dtos.MarketData {
 	}
 
 	return result
+}
+
+func (m MongoDBMarketDataRepository) UpdateResults(_id primitive.ObjectID, marketData entities.MarketData) {
+	ctx, client, marketDataCollection := m.GetMarketDataCollection()
+	defer client.Disconnect(ctx)
+
+	filter := bson.M{"_id": bson.M{"$eq": _id}}
+	change := bson.M{"$push": bson.M{"results": marketData.Results[0]}}
+
+	_, err := marketDataCollection.UpdateOne(ctx, filter, change)
+
+	if err != nil {
+		log.Println("Error updating document. " + err.Error())
+		panic(err.Error())
+	}
 }
 
 func (m MongoDBMarketDataRepository) GetMarketDataCollection() (context.Context, *mongo.Client, *mongo.Collection) {
