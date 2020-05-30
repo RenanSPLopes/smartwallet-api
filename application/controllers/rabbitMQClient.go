@@ -51,7 +51,7 @@ func (r RabbitMQClient) ListenMarketDataQueue(queueName string) {
 	<-forever
 }
 
-func (r RabbitMQClient) ListenStocksQuotation(queueName string){
+func (r RabbitMQClient) ListenStocksQuotation(queueName string) {
 	conn, ch, msgs := r.connectRabbitMQ(queueName)
 	defer conn.Close()
 	defer ch.Close()
@@ -69,7 +69,11 @@ func (r RabbitMQClient) ListenStocksQuotation(queueName string){
 				panic(err.Error())
 			}
 		}
-	}
+	}()
+
+	log.Printf(" [*] Waiting for messages.")
+
+	<-forever
 }
 
 func (r RabbitMQClient) connectRabbitMQ(queueName string) (*amqp.Connection, *amqp.Channel, <-chan amqp.Delivery) {

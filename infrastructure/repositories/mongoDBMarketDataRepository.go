@@ -138,7 +138,7 @@ func (m MongoDBMarketDataRepository) UpdateQuotes(code string, quote float32) {
 	_, err := marketDataCollection.UpdateOne(ctx, filter, change)
 
 	if err != nil {
-		log.Println("Error updating quotes. " + err.Err())
+		log.Println("Error updating quotes. " + err.Error())
 		panic(err.Error())
 	}
 }
