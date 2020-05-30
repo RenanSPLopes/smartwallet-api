@@ -1,8 +1,9 @@
 package main
 
 type RabbitMQConfig struct {
-	ConnectionString string
-	QueueName        string
+	ConnectionString         string
+	MarketDataQueueName      string
+	StocksQuotationQueueName string
 }
 
 type MongoDBConfig struct {
@@ -11,5 +12,5 @@ type MongoDBConfig struct {
 
 type Config struct {
 	RabbitMQ RabbitMQConfig
-	MongoDB MongoDBConfig
+	MongoDB  MongoDBConfig
 }

@@ -21,6 +21,7 @@ type MarketDataRepository interface {
 	GetById(id string) dtos.MarketData
 	GetByCode(code string) dtos.MarketData
 	UpdateResults(id primitive.ObjectID, result entities.Result)
+	UpdateQuotes(code string, quote float32)
 }
 
 type MongoDBMarketDataRepository struct {
@@ -117,12 +118,27 @@ func (m MongoDBMarketDataRepository) UpdateResults(_id primitive.ObjectID, resul
 	defer client.Disconnect(ctx)
 
 	filter := bson.M{"_id": bson.M{"$eq": _id}}
-	resultsChange := bson.M{"$push": bson.M{"results": result}}
+	change := bson.M{"$push": bson.M{"results": result}}
 
-	_, err := marketDataCollection.UpdateOne(ctx, filter, resultsChange)
+	_, err := marketDataCollection.UpdateOne(ctx, filter, change)
 
 	if err != nil {
 		log.Println("Error updating document. " + err.Error())
+		panic(err.Error())
+	}
+}
+
+func (m MongoDBMarketDataRepository) UpdateQuotes(code string, quote float32) {
+	ctx, client, marketDataCollection := m.GetMarketDataCollection()
+	defer client.Disconnect(ctx)
+
+	filter := bson.M{"stocks.code": bson.M{"$eq": code}}
+	change := bson.M{"$set": bson.M{"stocks.quote": quote}}
+
+	_, err := marketDataCollection.UpdateOne(ctx, filter, change)
+
+	if err != nil {
+		log.Println("Error updating quotes. " + err.Err())
 		panic(err.Error())
 	}
 }

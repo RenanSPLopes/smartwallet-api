@@ -1,3 +1,4 @@
 rabbitmq_connectionString: __RABBITMQ_CONNECTIONSTRING__
 rabbitmq_marketdata_queue_name: __MARKETDATA_QUEUE_NAME__
+rabbitmq_stocksQuotation_queue_name: __RABBITMQ_STOCKSQUOTATION_QUEUE_NAME__
 mongodb_connectionString: __MONGODB_CONNECTIONSTRING__

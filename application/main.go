@@ -9,11 +9,11 @@ func main() {
 }
 
 func initializeMarketDataListener(c Config) {
-	// marketDataProcessor := ProvideMarketDataProcessor()
 	rabbitmqClient := ProvideRabbitMQClient()
-	rabbitmqClient.ListenMarketDataQueue(c.RabbitMQ.QueueName)
+	rabbitmqClient.ListenMarketDataQueue(c.RabbitMQ.MarketDataQueueName)
 }
 
-func initializeStocksQuotationListener() {
-
+func initializeStocksQuotationListener(c Config) {
+	rabbitMQClient := ProvideRabbitMQClient()
+	rabbitMQClient.ListenStocksQuotation(c.RabbitMQ.StocksQuotationQueueName)
 }

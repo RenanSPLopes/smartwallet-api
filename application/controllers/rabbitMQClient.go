@@ -51,6 +51,27 @@ func (r RabbitMQClient) ListenMarketDataQueue(queueName string) {
 	<-forever
 }
 
+func (r RabbitMQClient) ListenStocksQuotation(queueName string){
+	conn, ch, msgs := r.connectRabbitMQ(queueName)
+	defer conn.Close()
+	defer ch.Close()
+
+	forever := make(chan bool)
+
+	go func() {
+		for d := range msgs {
+			log.Printf("Stocks Quotation: %s", d.Body)
+			var m models.StocksQuote
+			err := json.Unmarshal(d.Body, &m)
+
+			if err != nil {
+				log.Fatal("Failed to decode stocks quotes message.")
+				panic(err.Error())
+			}
+		}
+	}
+}
+
 func (r RabbitMQClient) connectRabbitMQ(queueName string) (*amqp.Connection, *amqp.Channel, <-chan amqp.Delivery) {
 	conn, err := amqp.Dial(r.ConnectionString)
 	failOnError(err, "Failed to connect to RabbitMQ")

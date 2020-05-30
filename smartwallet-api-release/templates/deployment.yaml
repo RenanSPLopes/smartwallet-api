@@ -28,6 +28,11 @@ spec:
             configMapKeyRef:
               name: marketdata-api-config
               key: rabbitmq_marketdata_queue_name
+        - name: STOCKSQUOTATION_QUEUE_NAME
+          valueFrom:
+            configMapKeyRef:
+              name: marketdata-api-config
+              key: rabbitmq_stocksQuotation_queue_name
         - name: MONGODB_CONNECTIONSTRING
           valueFrom:
             configMapKeyRef:
