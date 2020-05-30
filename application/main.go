@@ -3,6 +3,7 @@ package main
 func main() {
 	config := provideConfig()
 	go initializeMarketDataListener(config)
+	go initializeStocksQuotationListener(config)
 
 	r := registerRoutes()
 	r.Run(":19001")
