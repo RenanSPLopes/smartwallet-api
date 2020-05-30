@@ -14,8 +14,9 @@ import (
 func provideConfig() Config {
 	return Config{
 		RabbitMQ: RabbitMQConfig{
-			ConnectionString: os.Getenv("RABBIT_CONNECTIONSTRING"),
-			QueueName:        os.Getenv("MARKETDATA_QUEUE_NAME"),
+			ConnectionString:         os.Getenv("RABBIT_CONNECTIONSTRING"),
+			MarketDataQueueName:      os.Getenv("MARKETDATA_QUEUE_NAME"),
+			StocksQuotationQueueName: os.Getenv("STOCKSQUOTATION_QUEUE_NAME"),
 		},
 		MongoDB: MongoDBConfig{
 			ConnectionString: os.Getenv("MONGODB_CONNECTIONSTRING"),

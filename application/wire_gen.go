@@ -30,13 +30,21 @@ func ProvideMarketDataController() controllers.MarketDataController {
 	return marketDataController
 }
 
+func ProvideMarketDataProcessor() services.MarketDataProcessorService {
+	config := provideConfig()
+	mongoDBMarketDataRepository := provideMongoDBMarketDataRepository(config)
+	marketDataProcessorService := provideMarketDataProcessor(mongoDBMarketDataRepository)
+	return marketDataProcessorService
+}
+
 // wire.go:
 
 func provideConfig() Config {
 	return Config{
 		RabbitMQ: RabbitMQConfig{
-			ConnectionString: os.Getenv("RABBIT_CONNECTIONSTRING"),
-			QueueName:        os.Getenv("MARKETDATA_QUEUE_NAME"),
+			ConnectionString:         os.Getenv("RABBIT_CONNECTIONSTRING"),
+			MarketDataQueueName:      os.Getenv("MARKETDATA_QUEUE_NAME"),
+			StocksQuotationQueueName: os.Getenv("STOCKSQUOTATION_QUEUE_NAME"),
 		},
 		MongoDB: MongoDBConfig{
 			ConnectionString: os.Getenv("MONGODB_CONNECTIONSTRING"),
