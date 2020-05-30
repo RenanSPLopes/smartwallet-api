@@ -25,28 +25,10 @@ func failOnError(err error, msg string) {
 	}
 }
 
-func (r RabbitMQClient) Listen(queueName string) {
-	conn, err := amqp.Dial(r.ConnectionString)
-	failOnError(err, "Failed to connect to RabbitMQ")
+func (r RabbitMQClient) ListenMarketDataQueue(queueName string) {
+	conn, ch, msgs := r.connectRabbitMQ(queueName)
 	defer conn.Close()
-
-	ch, err := conn.Channel()
-	failOnError(err, "Failed to open a channel")
 	defer ch.Close()
-
-	q, err := ch.QueueDeclare(queueName, false, false, false, false, nil)
-	failOnError(err, "Failed to declare a queue")
-
-	msgs, err := ch.Consume(
-		q.Name, // queue
-		"",     // consumer
-		true,   // auto-ack
-		false,  // exclusive
-		false,  // no-local
-		false,  // no-wait
-		nil,    // args
-	)
-	failOnError(err, "Failed to register a consumer")
 
 	forever := make(chan bool)
 
@@ -67,4 +49,28 @@ func (r RabbitMQClient) Listen(queueName string) {
 	log.Printf(" [*] Waiting for messages.")
 
 	<-forever
+}
+
+func (r RabbitMQClient) connectRabbitMQ(queueName string) (*amqp.Connection, *amqp.Channel, <-chan amqp.Delivery) {
+	conn, err := amqp.Dial(r.ConnectionString)
+	failOnError(err, "Failed to connect to RabbitMQ")
+
+	ch, err := conn.Channel()
+	failOnError(err, "Failed to open a channel")
+
+	q, err := ch.QueueDeclare(queueName, false, false, false, false, nil)
+	failOnError(err, "Failed to declare a queue")
+
+	msgs, err := ch.Consume(
+		q.Name, // queue
+		"",     // consumer
+		true,   // auto-ack
+		false,  // exclusive
+		false,  // no-local
+		false,  // no-wait
+		nil,    // args
+	)
+	failOnError(err, "Failed to register a consumer")
+
+	return conn, ch, msgs
 }

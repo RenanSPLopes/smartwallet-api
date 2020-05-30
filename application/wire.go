@@ -49,3 +49,10 @@ func ProvideMarketDataController() controllers.MarketDataController {
 		marketDataRepositorySet,
 		controllers.NewMarketDataController))
 }
+
+func ProvideMarketDataProcessor() services.MarketDataProcessorService {
+	panic(wire.Build(
+		provideConfig,
+		marketDataRepositorySet,
+		provideMarketDataProcessor))
+}

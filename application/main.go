@@ -2,13 +2,18 @@ package main
 
 func main() {
 	config := provideConfig()
-	go initializeRabbitMq(config)
+	go initializeMarketDataListener(config)
 
 	r := registerRoutes()
 	r.Run(":19001")
 }
 
-func initializeRabbitMq(c Config) {
+func initializeMarketDataListener(c Config) {
+	// marketDataProcessor := ProvideMarketDataProcessor()
 	rabbitmqClient := ProvideRabbitMQClient()
-	rabbitmqClient.Listen(c.RabbitMQ.QueueName)
+	rabbitmqClient.ListenMarketDataQueue(c.RabbitMQ.QueueName)
+}
+
+func initializeStocksQuotationListener() {
+
 }
