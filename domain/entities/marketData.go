@@ -142,5 +142,10 @@ func (r OperatingResult) calculateMarginEBIT() float32 {
 }
 
 func (r OperatingResult) calculateNetMargin() float32 {
+
+	if r.NetIncome == 0 {
+		return 0
+	}
+
 	return float32(r.NetProfit / r.NetIncome)
 }
