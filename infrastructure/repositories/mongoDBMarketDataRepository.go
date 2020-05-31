@@ -105,9 +105,9 @@ func (m MongoDBMarketDataRepository) GetByCode(code string) dtos.MarketData {
 	var result dtos.MarketData
 	err := marketDataCollection.FindOne(ctx, bson.D{{"stocks.code", code}}).Decode(&result)
 
-	if err != nil && err != bson.ErrNilRegistry {
-		log.Fatal("Erro getting marketData by code. " + err.Error())
-		panic(err.Error())
+	if err != nil {
+		log.Println("No document with code found")
+		return dtos.MarketData{}
 	}
 
 	return result
