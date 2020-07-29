@@ -25,7 +25,7 @@ type Stock struct {
 type Result struct {
 	Date             string
 	BalanceSheet     BalanceSheet
-	OperatingResults OperatingResul
+	OperatingResults OperatingResult
 }
 
 type BalanceSheet struct {
