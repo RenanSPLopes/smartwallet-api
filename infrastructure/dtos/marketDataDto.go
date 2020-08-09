@@ -11,8 +11,7 @@ type MarketData struct {
 	SubSector      string
 	Segmentation   string
 	B3Segmentation string
-	TagAlong       string
-	FreeFloat      string
+	MarketValue    float64
 	Stocks         []Stock
 	Results        []Result
 }
@@ -33,27 +32,26 @@ type BalanceSheet struct {
 }
 
 type OperatingResult struct {
-	NetIncome                   float64
-	BookBalance                 float64
-	EBITDA                      float64
-	DepreciationAndAmortization float64
-	EBIT                        float64
-	NetProfit                   float64
+	NetIncome   float64
+	BookBalance float64
+	EBITDA      float64
+	NetProfit   float64
+	EquityValue float64
+	Capex       float64
 }
 
 type Result struct {
 	Date                string
 	BalanceSheet        BalanceSheet
 	OperatingResults    OperatingResult
-	Market              Market
 	FinancialIndicators FinancialIndicators
 }
 
-type Market struct {
-	MarketValue     float64
-	EnterpriseValue float64
-	StocksCount     float64
-}
+// type Market struct {
+// 	MarketValue     float64
+// 	EnterpriseValue float64
+// 	StocksCount     float64
+// }
 
 type MarketIndicators struct {
 	PriceEarningsRatio float32
