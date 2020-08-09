@@ -47,11 +47,6 @@ type Result struct {
 	FinancialIndicators FinancialIndicators
 }
 
-// type Market struct {
-// 	MarketValue     float64
-// 	EnterpriseValue float64
-// 	StocksCount     float64
-// }
 
 type MarketIndicators struct {
 	PriceEarningsRatio float32
