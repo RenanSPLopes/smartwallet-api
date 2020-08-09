@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"log"
 	"smartwallet-api/application/models"
 	"smartwallet-api/infrastructure/repositories"
 
@@ -34,6 +35,8 @@ func (controller *MarketDataController) GetById(c *gin.Context) {
 		c.JSON(400, gin.H{"msg": err})
 		return
 	}
+
+	log.Println("ID: " + marketData.ID)
 
 	dto := controller.MarketDataRepository.GetById(marketData.ID)
 	c.JSON(200, dto)

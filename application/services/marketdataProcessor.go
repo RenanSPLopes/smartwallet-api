@@ -30,7 +30,7 @@ func (m MarketDataProcessorService) Process(marketDataModel models.MarketData) {
 
 	marketDataFromDb := m.MarketDataRepository.GetByCode(marketData.Stocks[0].Code)
 
-	if marketDataFromDb.Name != "" {
+	if existsOnDb(marketDataFromDb) {
 		result := marketData.Results[0]
 		dates := extractResultsDates(marketDataFromDb.Results)
 
@@ -45,6 +45,10 @@ func (m MarketDataProcessorService) Process(marketDataModel models.MarketData) {
 
 	marketData.CalculateStocksIndicators()
 	m.MarketDataRepository.Save(marketData)
+}
+
+func existsOnDb(marketData dtos.MarketData) bool {
+	return marketData.Name != ""
 }
 
 func extractResultsDates(results []dtos.Result) []string {
