@@ -26,6 +26,7 @@ func NewMarketDataProcessorService(m repositories.MarketDataRepository) MarketDa
 func (m MarketDataProcessorService) Process(marketDataModel models.MarketData) {
 	var marketData entities.MarketData
 	mapper.MapLoose(marketDataModel, &marketData)
+	log.Printf("Map entity: %s", marketData)
 	marketData.CalculateResultIndicators()
 
 	marketDataFromDb := m.MarketDataRepository.GetByCode(marketData.Stocks[0].Code)
