@@ -53,15 +53,15 @@ type FinancialIndicators struct {
 func (m *MarketData) CalculateResultIndicators() {
 	var results []Result
 
-	r := m.Results[0]
-	r.FinancialIndicators = FinancialIndicators{
-		MarginEBITDA:  r.OperatingResults.calculateMarginEBITDA(),
-		NetMargin:     r.OperatingResults.calculateNetMargin(),
-		ROE:           r.OperatingResults.calculateROE(r.BalanceSheet.NetEquity),
-		DebitToEBITDA: r.OperatingResults.calculateDebitToEBITDA(r.BalanceSheet.NetDebt),
+	for _, r := range m.Results {
+		r.FinancialIndicators = FinancialIndicators{
+			MarginEBITDA:  r.OperatingResults.calculateMarginEBITDA(),
+			NetMargin:     r.OperatingResults.calculateNetMargin(),
+			ROE:           r.OperatingResults.calculateROE(r.BalanceSheet.NetEquity),
+			DebitToEBITDA: r.OperatingResults.calculateDebitToEBITDA(r.BalanceSheet.NetDebt),
+		}
+		results = append(results, r)
 	}
-	results = append(results, r)
-
 	m.Results = results
 }
 
