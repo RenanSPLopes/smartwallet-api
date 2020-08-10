@@ -50,14 +50,11 @@ type MarketIndicators struct {
 	PriceEarningsRatio float32
 	PriceAssetValue    float32
 	PriceEBITDA        float32
-	PriceEBIT          float32
 }
 
 type FinancialIndicators struct {
 	MarginEBITDA  float32
-	MarginEBIT    float32
 	NetMargin     float32
 	ROE           float32
 	DebitToEBITDA float32
-	DebitToEBIT   float32
 }
