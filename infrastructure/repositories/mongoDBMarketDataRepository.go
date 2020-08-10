@@ -39,14 +39,14 @@ func (m MongoDBMarketDataRepository) Save(marketData entities.MarketData) {
 
 	ctx, client, marketDataCollection := m.GetMarketDataCollection()
 	defer client.Disconnect(ctx)
-	result, err := marketDataCollection.InsertOne(ctx, marketDataDto)
+	_, err := marketDataCollection.InsertOne(ctx, marketDataDto)
 
 	if err != nil {
 		log.Fatal(err)
 		panic(err)
 	}
 
-	fmt.Println(result.InsertedID)
+	fmt.Println(marketDataDto)
 }
 
 func (m MongoDBMarketDataRepository) GetAll() []dtos.MarketData {
