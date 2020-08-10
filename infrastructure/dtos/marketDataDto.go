@@ -17,10 +17,9 @@ type MarketData struct {
 }
 
 type Stock struct {
-	Code             string
-	Type             string
-	Quotes           float32
-	MarketIndicators []MarketIndicators
+	Code   string
+	Type   string
+	Quotes float32
 }
 
 type BalanceSheet struct {
@@ -46,7 +45,6 @@ type Result struct {
 	OperatingResults    OperatingResult
 	FinancialIndicators FinancialIndicators
 }
-
 
 type MarketIndicators struct {
 	PriceEarningsRatio float32
