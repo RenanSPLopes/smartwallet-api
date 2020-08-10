@@ -2,7 +2,6 @@ package repositories
 
 import (
 	"context"
-	"fmt"
 	"log"
 	"smartwallet-api/domain/entities"
 	"smartwallet-api/infrastructure/dtos"
@@ -45,8 +44,6 @@ func (m MongoDBMarketDataRepository) Save(marketData entities.MarketData) {
 		log.Fatal(err)
 		panic(err)
 	}
-
-	fmt.Println(marketDataDto)
 }
 
 func (m MongoDBMarketDataRepository) GetAll() []dtos.MarketData {

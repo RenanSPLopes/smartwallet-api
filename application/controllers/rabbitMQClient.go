@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"fmt"
 	"log"
 	"smartwallet-api/application/models"
 	"smartwallet-api/application/services"
@@ -37,6 +38,7 @@ func (r RabbitMQClient) ListenMarketDataQueue(queueName string) {
 			// log.Printf("Received a message: %s", d.Body)
 			var m models.MarketData
 			err := json.Unmarshal(d.Body, &m)
+			fmt.Printf("Received a message: %s", m)
 
 			if err != nil {
 				log.Fatal("Failed to decode message.")
