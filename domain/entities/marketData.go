@@ -78,14 +78,29 @@ func (m *MarketData) CalculateStocksIndicators() {
 }
 
 func (r OperatingResult) calculateROE(netEquity float64) float32 {
+
+	if netEquity == 0 {
+		return 0
+	}
+
 	return float32(r.NetProfit / netEquity)
 }
 
 func (r OperatingResult) calculateDebitToEBITDA(netDebt float64) float32 {
+
+	if r.EBITDA == 0 {
+		return 0
+	}
+
 	return float32(netDebt / r.EBITDA)
 }
 
 func (r OperatingResult) calculateMarginEBITDA() float32 {
+
+	if r.NetIncome == 0 {
+		return 0
+	}
+
 	return float32(r.EBITDA / r.NetIncome)
 }
 
