@@ -59,7 +59,7 @@ func (r RabbitMQClient) ListenMarketDataQueue(queueName string) {
 
 func isBank(message string) bool {
 	message = strings.ToLower(message)
-	return strings.Contains(message, "segmentation:bancos")
+	return strings.Contains(message, "\"Segmentation\":\"Bancos\"")
 }
 
 func (r RabbitMQClient) ListenStocksQuotation(queueName string) {
