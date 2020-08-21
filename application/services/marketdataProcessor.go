@@ -13,6 +13,7 @@ import (
 
 type MarketDataProcessor interface {
 	Process(marketData models.MarketData)
+	ProcessBankMarketData(marketDataModel models.BankMarketData)
 }
 
 type MarketDataProcessorService struct {
@@ -24,6 +25,30 @@ func NewMarketDataProcessorService(m repositories.MarketDataRepository) MarketDa
 }
 
 func (m MarketDataProcessorService) Process(marketDataModel models.MarketData) {
+	var marketData entities.MarketData
+	mapper.MapLoose(marketDataModel, &marketData)
+	marketData.CalculateResultIndicators()
+
+	marketDataFromDb := m.MarketDataRepository.GetByCode(marketData.Stocks[0].Code)
+
+	if existsOnDb(marketDataFromDb) {
+		result := marketData.Results[0]
+		dates := extractResultsDates(marketDataFromDb.Results)
+
+		if utils.Contains(dates, marketData.Results[0].Date) {
+			log.Println("Result already exist on database.")
+			return
+		}
+
+		m.MarketDataRepository.UpdateResults(marketDataFromDb.ID, result)
+		return
+	}
+
+	marketData.CalculateStocksIndicators()
+	m.MarketDataRepository.Save(marketData)
+}
+
+func (m MarketDataProcessorService) ProcessBankMarketData(marketDataModel models.BankMarketData) {
 	var marketData entities.MarketData
 	mapper.MapLoose(marketDataModel, &marketData)
 	marketData.CalculateResultIndicators()

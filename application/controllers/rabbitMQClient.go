@@ -4,6 +4,7 @@ import (
 	"log"
 	"smartwallet-api/application/models"
 	"smartwallet-api/application/services"
+	"strings"
 
 	"github.com/streadway/amqp"
 
@@ -35,20 +36,30 @@ func (r RabbitMQClient) ListenMarketDataQueue(queueName string) {
 	go func() {
 		for d := range msgs {
 			log.Printf("Received a message: %s", d.Body)
-			var m models.MarketData
-			err := json.Unmarshal(d.Body, &m)
 
-			if err != nil {
-				log.Fatal("Failed to decode message.")
+			if isBank(string(d.Body)) {
+				log.Println("Bank data received!!")
+			} else {
+				var m models.MarketData
+				err := json.Unmarshal(d.Body, &m)
+
+				if err != nil {
+					log.Fatal("Failed to decode message.")
+				}
+
+				r.MarketDataProcessor.Process(m)
 			}
-
-			r.MarketDataProcessor.Process(m)
 		}
 	}()
 
 	log.Printf(" [*] Waiting for messages.")
 
 	<-forever
+}
+
+func isBank(message string) bool {
+	message = strings.ToLower(message)
+	return strings.Contains(message, "segmentation:bancos")
 }
 
 func (r RabbitMQClient) ListenStocksQuotation(queueName string) {
