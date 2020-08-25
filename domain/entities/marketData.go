@@ -20,20 +20,23 @@ type Stock struct {
 }
 
 type BalanceSheet struct {
-	TotalAsset float64
-	NetEquity  float64
-	GrossDebt  float64
-	Cash       float64
-	NetDebt    float64
+	TotalAsset                     float64
+	NetEquity                      float64
+	GrossDebt                      float64
+	Cash                           float64
+	NetDebt                        float64
+	FinancialIntermediationRevenue float64
 }
 
 type OperatingResult struct {
-	NetIncome   float64
-	BookBalance float64
-	EBITDA      float64
-	NetProfit   float64
-	EquityValue float64
-	Capex       float64
+	NetIncome      float64
+	BookBalance    float64
+	EBITDA         *float64
+	NetProfit      float64
+	EquityValue    float64
+	Capex          float64
+	PDD            *float64
+	ServiceRevenue *float64
 }
 
 type Result struct {
@@ -88,11 +91,11 @@ func (r OperatingResult) calculateROE(netEquity float64) float32 {
 
 func (r OperatingResult) calculateDebitToEBITDA(netDebt float64) float32 {
 
-	if r.EBITDA == 0 {
+	if *r.EBITDA == 0 {
 		return 0
 	}
 
-	return float32(netDebt / r.EBITDA)
+	return float32(netDebt / *r.EBITDA)
 }
 
 func (r OperatingResult) calculateMarginEBITDA() float32 {
@@ -101,7 +104,7 @@ func (r OperatingResult) calculateMarginEBITDA() float32 {
 		return 0
 	}
 
-	return float32(r.EBITDA / r.NetIncome)
+	return float32(*r.EBITDA / r.NetIncome)
 }
 
 func (r OperatingResult) calculateNetMargin() float32 {
