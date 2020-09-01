@@ -39,5 +39,7 @@ func (controller *MarketDataController) GetById(c *gin.Context) {
 	log.Println("ID: " + marketData.ID)
 
 	dto := controller.MarketDataRepository.GetById(marketData.ID)
-	c.JSON(200, dto)
+	var model models.MarketData
+	mapper.Map(dto, &model)
+	c.JSON(200, model)
 }
