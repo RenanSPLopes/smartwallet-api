@@ -38,12 +38,13 @@ type BalanceSheet struct {
 }
 
 type OperatingResult struct {
-	NetIncome      float64
-	BookBalance    float64
-	EBITDA         *float64 `json:",omitempty"`
-	NetProfit      float64
-	EquityValue    float64
-	Capex          float64
-	PDD            *float64 `json:",omitempty"`
-	ServiceRevenue *float64 `json:",omitempty"`
+	NetIncome        float64
+	BookBalance      float64
+	EBITDA           *float64 `json:",omitempty"`
+	NetProfit        float64
+	EquityValue      float64
+	Capex            float64
+	PDD              *float64 `json:",omitempty"`
+	ServiceRevenue   *float64 `json:",omitempty"`
+	EarningsPerShare float64
 }

@@ -29,14 +29,15 @@ type BalanceSheet struct {
 }
 
 type OperatingResult struct {
-	NetIncome      float64
-	BookBalance    float64
-	EBITDA         *float64
-	NetProfit      float64
-	EquityValue    float64
-	Capex          float64
-	PDD            *float64
-	ServiceRevenue *float64
+	NetIncome        float64
+	BookBalance      float64
+	EBITDA           *float64
+	NetProfit        float64
+	EquityValue      float64
+	Capex            float64
+	PDD              *float64
+	ServiceRevenue   *float64
+	EarningsPerShare float64
 }
 
 type Result struct {
