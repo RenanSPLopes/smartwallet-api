@@ -19,13 +19,22 @@ type Stock struct {
 	Quotes float32
 }
 
+//Balanço Patrimonial
 type BalanceSheet struct {
-	TotalAsset                     float64
-	NetEquity                      float64
+	TotalAsset                     float64 // Ativo Total
+	NetEquity                      float64 // Patrimônio Líquido
 	GrossDebt                      float64
 	Cash                           float64
 	NetDebt                        float64
 	FinancialIntermediationRevenue float64
+}
+
+type Result struct {
+	Date                string
+	BalanceSheet        BalanceSheet
+	OperatingResults    OperatingResult
+	FinancialIndicators FinancialIndicators
+	CashFlow            CashFlow
 }
 
 type OperatingResult struct {
@@ -40,11 +49,11 @@ type OperatingResult struct {
 	EarningsPerShare float64
 }
 
-type Result struct {
-	Date                string
-	BalanceSheet        BalanceSheet
-	OperatingResults    OperatingResult
-	FinancialIndicators FinancialIndicators
+type CashFlow struct {
+	FreeCashFlow       float64 // Fluxo de Caixa Livre
+	OperatingCashFlow  float64 //Fluxo de Caixa Operacional
+	InvestmentCashFlow float64 // Fluxo de Caixa de Investimento
+	FinancingCashFlow  float64 // Fluxo de Caixa de Financiamento
 }
 
 type FinancialIndicators struct {

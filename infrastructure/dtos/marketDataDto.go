@@ -31,6 +31,14 @@ type BalanceSheet struct {
 	FinancialIntermediationRevenue float64
 }
 
+type Result struct {
+	Date                string
+	BalanceSheet        BalanceSheet
+	OperatingResults    OperatingResult
+	FinancialIndicators FinancialIndicators
+	CashFlow            CashFlow
+}
+
 type OperatingResult struct {
 	NetIncome        float64
 	BookBalance      float64
@@ -43,11 +51,11 @@ type OperatingResult struct {
 	EarningsPerShare float64
 }
 
-type Result struct {
-	Date                string
-	BalanceSheet        BalanceSheet
-	OperatingResults    OperatingResult
-	FinancialIndicators FinancialIndicators
+type CashFlow struct {
+	FreeCashFlow       float64 // Fluxo de Caixa Livre
+	OperatingCashFlow  float64 //Fluxo de Caixa Operacional
+	InvestmentCashFlow float64 // Fluxo de Caixa de Investimento
+	FinancingCashFlow  float64 // Fluxo de Caixa de Financiamento
 }
 
 type MarketIndicators struct {

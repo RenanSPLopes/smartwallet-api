@@ -26,6 +26,7 @@ type Result struct {
 	Date             string
 	BalanceSheet     BalanceSheet
 	OperatingResults OperatingResult
+	CashFlow         CashFlow
 }
 
 type BalanceSheet struct {
@@ -47,4 +48,11 @@ type OperatingResult struct {
 	PDD              *float64 `json:",omitempty"`
 	ServiceRevenue   *float64 `json:",omitempty"`
 	EarningsPerShare float64
+}
+
+type CashFlow struct {
+	FreeCashFlow       float64
+	OperatingCashFlow  float64
+	InvestmentCashFlow float64
+	FinancingCashFlow  float64
 }
