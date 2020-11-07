@@ -2,6 +2,7 @@ package repositories
 
 import (
 	"context"
+	"encoding/json"
 	"log"
 	"smartwallet-api/domain/entities"
 	"smartwallet-api/infrastructure/dtos"
@@ -32,7 +33,8 @@ func NewMongoDBMarketDataRepository(conectionString string) *MongoDBMarketDataRe
 }
 
 func (m MongoDBMarketDataRepository) Save(marketData entities.MarketData) {
-	log.Printf("MARKET-DATA: ", marketData)
+	encodedMarketData, _ := json.Marshal(marketData)
+	log.Printf("MARKET-DATA: ", encodedMarketData)
 	var marketDataDto dtos.MarketData
 	mapper.MapLoose(marketData, &marketDataDto)
 	marketDataDto.ID = primitive.NewObjectID()
