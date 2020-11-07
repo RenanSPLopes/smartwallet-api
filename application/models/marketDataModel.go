@@ -23,10 +23,11 @@ type Stock struct {
 }
 
 type Result struct {
-	Date             string
-	BalanceSheet     BalanceSheet
-	OperatingResults OperatingResult
-	CashFlow         CashFlow
+	Date                string
+	BalanceSheet        BalanceSheet
+	OperatingResults    OperatingResult
+	CashFlow            CashFlow
+	FinancialIndicators FinancialIndicators
 }
 
 type BalanceSheet struct {
@@ -60,4 +61,12 @@ type CashFlow struct {
 	OperatingCashFlow  float64
 	InvestmentCashFlow float64
 	FinancingCashFlow  float64
+}
+
+type FinancialIndicators struct {
+	MarginEBITDA  float32
+	NetMargin     float32
+	ROE           float32
+	DebitToEBITDA float32
+	ROA           float32
 }

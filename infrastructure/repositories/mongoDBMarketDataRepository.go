@@ -2,7 +2,6 @@ package repositories
 
 import (
 	"context"
-	"encoding/json"
 	"log"
 	"smartwallet-api/domain/entities"
 	"smartwallet-api/infrastructure/dtos"
@@ -36,9 +35,6 @@ func (m MongoDBMarketDataRepository) Save(marketData entities.MarketData) {
 	var marketDataDto dtos.MarketData
 	mapper.MapLoose(marketData, &marketDataDto)
 	marketDataDto.ID = primitive.NewObjectID()
-
-	encodedMarketData, _ := json.Marshal(marketDataDto)
-	log.Printf("MARKET-DATA: ", string(encodedMarketData))
 
 	ctx, client, marketDataCollection := m.GetMarketDataCollection()
 	defer client.Disconnect(ctx)
