@@ -32,6 +32,7 @@ func NewMongoDBMarketDataRepository(conectionString string) *MongoDBMarketDataRe
 }
 
 func (m MongoDBMarketDataRepository) Save(marketData entities.MarketData) {
+	log.Println(marketData)
 	var marketDataDto dtos.MarketData
 	mapper.MapLoose(marketData, &marketDataDto)
 	marketDataDto.ID = primitive.NewObjectID()
