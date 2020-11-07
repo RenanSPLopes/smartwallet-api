@@ -69,4 +69,5 @@ type FinancialIndicators struct {
 	NetMargin     float32
 	ROE           float32
 	DebitToEBITDA float32
+	ROA           float32
 }

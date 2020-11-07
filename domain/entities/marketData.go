@@ -19,16 +19,6 @@ type Stock struct {
 	Quotes float32
 }
 
-//Balanço Patrimonial
-type BalanceSheet struct {
-	TotalAsset                     float64 // Ativo Total
-	NetEquity                      float64 // Patrimônio Líquido
-	GrossDebt                      float64
-	Cash                           float64
-	NetDebt                        float64
-	FinancialIntermediationRevenue float64
-}
-
 type Result struct {
 	Date                string
 	BalanceSheet        BalanceSheet
@@ -37,21 +27,30 @@ type Result struct {
 	CashFlow            CashFlow
 }
 
+//Balanço Patrimonial
+type BalanceSheet struct {
+	TotalAsset float64 // Ativo Total
+	NetEquity  float64 // Patrimônio Líquido
+	GrossDebt  float64
+	Cash       float64
+	NetDebt    float64
+}
+
 type OperatingResult struct {
-	NetIncome        float64
-	BookBalance      float64
+	NetIncome        float64 //Receita Líquida
+	BookBalance      float64 // Receita Operacional Bruta
 	EBITDA           *float64
-	NetProfit        float64
-	EquityValue      float64
+	NetProfit        float64 // Lucro Líquido
+	EquityValue      float64 // Valor Patrimonial
 	Capex            float64
 	PDD              *float64
 	ServiceRevenue   *float64
-	EarningsPerShare float64
+	EarningsPerShare float64 //Lucro por acao
 }
 
 type CashFlow struct {
 	FreeCashFlow       float64 // Fluxo de Caixa Livre
-	OperatingCashFlow  float64 //Fluxo de Caixa Operacional
+	OperatingCashFlow  float64 // Fluxo de Caixa Operacional
 	InvestmentCashFlow float64 // Fluxo de Caixa de Investimento
 	FinancingCashFlow  float64 // Fluxo de Caixa de Financiamento
 }
@@ -61,6 +60,7 @@ type FinancialIndicators struct {
 	NetMargin     float32
 	ROE           float32
 	DebitToEBITDA float32
+	ROA           float32
 }
 
 func (m *MarketData) CalculateResultIndicators() {
@@ -72,6 +72,7 @@ func (m *MarketData) CalculateResultIndicators() {
 			NetMargin:     r.OperatingResults.calculateNetMargin(),
 			ROE:           r.OperatingResults.calculateROE(r.BalanceSheet.NetEquity),
 			DebitToEBITDA: r.OperatingResults.calculateDebitToEBITDA(r.BalanceSheet.NetDebt),
+			ROA:           r.OperatingResults.calculateROA(r.BalanceSheet.TotalAsset),
 		}
 		results = append(results, r)
 	}
@@ -97,6 +98,15 @@ func (r OperatingResult) calculateROE(netEquity float64) float32 {
 	}
 
 	return float32(r.NetProfit / netEquity)
+}
+
+func (r OperatingResult) calculateROA(totalAsset float64) float32 {
+
+	if totalAsset == 0 {
+		return 0
+	}
+
+	return float32(r.NetProfit / totalAsset)
 }
 
 func (r OperatingResult) calculateDebitToEBITDA(netDebt float64) float32 {
