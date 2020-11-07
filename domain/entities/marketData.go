@@ -116,7 +116,7 @@ func (r OperatingResult) calculateROA(totalAsset float64) float32 {
 
 func (r OperatingResult) calculateDebitToEBITDA(netDebt float64) float32 {
 
-	if r.EBITDA == nil {
+	if *r.EBITDA == 0 {
 		return 0
 	}
 
