@@ -34,7 +34,7 @@ func NewMongoDBMarketDataRepository(conectionString string) *MongoDBMarketDataRe
 
 func (m MongoDBMarketDataRepository) Save(marketData entities.MarketData) {
 	encodedMarketData, _ := json.Marshal(marketData)
-	log.Printf("MARKET-DATA: ", encodedMarketData)
+	log.Printf("MARKET-DATA: ", string(encodedMarketData))
 	var marketDataDto dtos.MarketData
 	mapper.MapLoose(marketData, &marketDataDto)
 	marketDataDto.ID = primitive.NewObjectID()
