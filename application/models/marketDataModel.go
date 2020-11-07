@@ -31,6 +31,11 @@ type Result struct {
 
 type BalanceSheet struct {
 	TotalAsset                     float64
+	CurrentAssets                  float64 // Ativo Circulante
+	NonCurrentAssets               float64 // Ativo não Circulante
+	TotalLiabilities               float64 // Passivo Total
+	CurrentLiabilities             float64 // Passivo Circulante
+	NonCurrentLiabilities          float64 // Passivo não Circulante
 	NetEquity                      float64
 	GrossDebt                      float64
 	Cash                           float64
